@@ -9,6 +9,8 @@ const bodyparser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
 
+const app = express();
+
 // creating 24 hours from milliseconds
 const oneDay = 1000 * 60 * 60 * 24;
 
@@ -22,7 +24,7 @@ app.use(
   })
 );
 
-const app = express();
+app.use(cookieParser());
 
 const db = require("./db");
 

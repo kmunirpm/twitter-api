@@ -1,8 +1,8 @@
-INSERT INTO users (username, password)
+INSERT INTO users (username, name, password)
 VALUES
-  ('user-alex', 'abcd'),
-  ('user-bob', 'bcde'),
-  ('user-chris', 'cdef');
+  ('user-alex', 'Alex Morgan', 'abcd'),
+  ('user-bob', 'Bob Jones', 'bcde'),
+  ('user-chris', 'Chris James', 'cdef');
 
 
 INSERT INTO tweets (tweet, user_id)
