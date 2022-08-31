@@ -27,7 +27,7 @@ module.exports = (db) => {
       .catch((error) => response.json(error));
   });
 
-  router.get("/user/:id/:pwd", (request, response) => {
+  router.get("/user/login/:id/:pwd", (request, response) => {
     const username = request.params.id;
     const password = request.params.pwd;
     db.query(
