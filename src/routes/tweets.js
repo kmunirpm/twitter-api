@@ -2,7 +2,9 @@ const router = require("express").Router();
 
 module.exports = (db) => {
   router.get("/tweets", (request, response) => {
+    session = request.session;
     const user_id = session.userid;
+
     db.query(
       `
       SELECT * FROM tweets where user_id=$1::integer
@@ -13,36 +15,51 @@ module.exports = (db) => {
     });
   });
 
-  router.get("/tweet/create/:id/:name/:pwd", (request, response) => {
-    const username = request.params.id;
-    const name = request.params.name;
-    const password = request.params.pwd;
+  router.get("/tweet/create/:tweet", (request, response) => {
+    session = request.session;
+    const user_id = session.userid;
+    const tweet = request.params.tweet;
     db.query(
       `
-      INSERT INTO tweets (username, name, password) VALUES ($1::text, $2::text, $3::text) 
+      INSERT INTO tweets (user_id, tweet) VALUES ($1::integer, $2::text) 
     `,
-      [username, name, password]
+      [user_id, tweet]
     )
       .then(({ rows: tweets }) => {
-        response.send(`New tweet ${name} added.`);
+        response.send(`New tweet ${tweet} added.`);
       })
       .catch((error) => response.json(error));
   });
 
-  router.get("/tweets/:id/:pwd", (request, response) => {
-    const username = request.params.id;
-    const password = request.params.pwd;
+  router.get("/tweet/update/:id/:tweet", (request, response) => {
+    session = request.session;
+    const user_id = session.userid;
+    const id = request.params.id;
+    const tweet = request.params.tweet;
     db.query(
       `
-      SELECT name FROM tweets where username=$1::text and password=$2::text 
+      UPDATE tweets set tweet=$3::text where user_id=$1::integer and id=$2::integer
     `,
-      [username, password]
+      [user_id, id, tweet]
     )
       .then(({ rows: tweets }) => {
-        session = request.session;
-        session.userid = request.params.id;
-        if (tweets.length) response.send(tweets);
-        else response.send("Invalid username or password");
+        response.send(`Tweet ${id} updated.`);
+      })
+      .catch((error) => response.json(error));
+  });
+
+  router.get("/tweet/delete/:id", (request, response) => {
+    session = request.session;
+    const user_id = session.userid;
+    const id = request.params.id;
+    db.query(
+      `
+      DELETE FROM tweets where user_id=$1::integer and id=$2::integer 
+    `,
+      [user_id, id]
+    )
+      .then(({ rows: tweets }) => {
+        response.send(`Tweet ${id} deleted.`);
       })
       .catch((error) => response.json(error));
   });
