@@ -2,9 +2,25 @@ const fs = require("fs");
 const path = require("path");
 
 const express = require("express");
+const cookieParser = require("cookie-parser");
+const sessions = require("express-session");
+
 const bodyparser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
+
+// creating 24 hours from milliseconds
+const oneDay = 1000 * 60 * 60 * 24;
+
+//session middleware
+app.use(
+  sessions({
+    secret: "appsecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized: true,
+    cookie: { maxAge: oneDay },
+    resave: false,
+  })
+);
 
 const app = express();
 
