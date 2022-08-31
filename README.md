@@ -50,3 +50,16 @@ Running the server so it returns an error when saving/deleting for testing the c
 ```sh
 npm run error
 ```
+
+## API Endpoinds
+
+- http://localhost:8001/api/users
+- http://localhost:8001/api/user/register/:username/:name/:password
+- http://localhost:8001/api/user/login/:username/:password
+
+Only logged in users can view / update / delete their tweets
+
+- http://localhost:8001/api/tweets
+- http://localhost:8001/api/tweet/create/:tweet
+- http://localhost:8001/api/tweet/update/:id/:tweet
+- http://localhost:8001/api/tweet/delete/:id
