@@ -2,10 +2,12 @@ const router = require("express").Router();
 
 module.exports = (db) => {
   router.get("/tweets", (request, response) => {
+    const user_id = session.userid;
     db.query(
       `
-      SELECT username FROM tweets
-    `
+      SELECT * FROM tweets where user_id=$1::integer
+    `,
+      [user_id]
     ).then(({ rows: tweets }) => {
       response.json(tweets);
     });

@@ -32,15 +32,19 @@ module.exports = (db) => {
     const password = request.params.pwd;
     db.query(
       `
-      SELECT name FROM users where username=$1::text and password=$2::text 
+      SELECT id, name FROM users where username=$1::text and password=$2::text 
     `,
       [username, password]
     )
       .then(({ rows: users }) => {
         session = request.session;
-        session.userid = request.params.id;
-        if (users.length) response.send(users);
-        else response.send("Invalid username or password");
+        if (users.length > 0) {
+          session.userid = users[0].id;
+          response.send(users);
+        } else {
+          session.userid = 0;
+          response.send("Invalid username or password");
+        }
       })
       .catch((error) => response.json(error));
   });
